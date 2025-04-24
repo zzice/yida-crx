@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>宜搭开发助手</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>宜搭开发助手</h1>
+    </header>
+    <div class="converter">
+      <div class="form-group">
+        <label>地址：</label>
+        <input type="text" id="url-input" placeholder="请输入需要转换的地址">
+      </div>
+      <div class="form-group type-selector">
+        <label>类型：</label>
+        <div class="radio-group">
+          <label class="radio-label">
+            <input type="radio" name="url-type" value="workbench" checked>
+            <span>钉钉工作台</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="url-type" value="sidebar">
+            <span>钉钉侧边栏</span>
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <button id="convert-btn">转换</button>
+      </div>
+      <div class="form-group">
+        <label>处理后地址：</label>
+        <input type="text" id="converted-result" readonly>
+      </div>
+      <div class="form-group button-group">
+        <button id="copy-result-btn">复制链接</button>
+        <button id="open-result-btn">打开链接</button>
+      </div>
+    </div>
+    <footer class="footer">
+      <p>2025 by zice</p>
+    </footer>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html> 

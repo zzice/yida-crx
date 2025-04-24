@@ -1,0 +1,42 @@
+{
+  "manifest_version": 3,
+  "name": "宜搭开发助手",
+  "version": "1.0.0",
+  "description": "Chrome插件：宜搭开发助手",
+  "icons": {
+    "16": "icons/logo-16.png",
+    "32": "icons/logo-32.png",
+    "48": "icons/logo-48.png",
+    "128": "icons/logo-128.png"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "128": "icons/logo-128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*.aliwork.com/alibaba/web/*/design/pageDesigner*"],
+      "js": ["content/content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["content/data/*"],
+      "matches": ["https://*.aliwork.com/*"]
+    }
+  ],
+  "permissions": [
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ]
+}

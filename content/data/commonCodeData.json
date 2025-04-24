@@ -1,0 +1,37 @@
+[
+  {
+    "title": "获取登录用户ID",
+    "code": "const userId = this.utils.getLoginUserId();",
+    "description": "获取当前登录用户的唯一标识ID"
+  },
+  {
+    "title": "获取登录用户名称",
+    "code": "const userName = this.utils.getLoginUserName();",
+    "description": "获取当前登录用户的显示名称"
+  },
+  {
+    "title": "提示框Toast",
+    "code": "this.utils.toast({\n  title: '标题', // 标题\n  type: 'success',// success,warning,error,notice,help,loading\n  size: 'large',\n  duration: 2000, // 显示时长,type 为 loding 时无效\n});",
+    "description": "显示轻量级的反馈提示，支持多种类型和自定义配置"
+  },
+  {
+    "title": "vConsole",
+    "code": "// vConsole JS动作面板，在最上方输入下面代码，保存。Tips: 调试完成后删除或注释该代码\nconst vConsole = 'https://g.alicdn.com/code/lib/vConsole/3.11.2/vconsole.min.js'; \nconst js = document.createElement('script'); \njs.src = vConsole; \ndocument.body.append(js); \njs.onload = function () {\n  window.vConsole = new window.VConsole();\n};",
+    "description": "在页面中加载调试控制台，方便在PC/移动设备上调试"
+  },
+  {
+    "title": "loading加载提示框",
+    "code": "/**\n * this.poptoastLoading('数据加载中...',20); //显示loading\n * this.onCloseLoading(); //隐藏loading\n */\nlet closeLoading;\n\nexport function poptoastLoading(title_str, s) {\n  closeLoading = this.utils.toast({\n    title: title_str,\n    type: 'loading',\n    size: \"large\"\n  });\n  if (s != 0) {\n    setTimeout(() => {\n      this.onCloseLoading();\n    }, s * 1000);\n  }\n}\n\nexport function onCloseLoading() {\n  if (closeLoading) {\n    closeLoading();\n  }\n}\n\nexport function getPageMode() {\n    const { flowData = {} } = this.utils.getFormInstanceData();\n    const { editMode, viewMode } = flowData;\n    if (this.utils.isSubmissionPage()) return '提交页';\n    if (viewMode && editMode === false) return '预览页';\n    if (editMode && viewMode === false) return '编辑页';\n    return '流程中';\n}",
+    "description": "获取页面模式类型submit/view/edit"
+  },
+  {
+    "title": "隐藏成员组件右侧图标按钮",
+    "code": "// 通过复合选择器定位元素并隐藏 \ndocument.querySelectorAll(\n  '[id^=\"employeeField_\"] .next-input-inner.next-before'\n).forEach(element => {\n  element.style.display = 'none';\n});",
+    "description": "隐藏成员组件右侧图标按钮"
+  },
+  {
+    "title": "隐藏部门组件右侧图标按钮",
+    "code": "// 通过复合选择器定位元素并隐藏 \ndocument.querySelectorAll(\n  '[id^=\"departmentSelectField_\"] .next-input-inner.next-before'\n).forEach(element => {\n  element.style.display = 'none';\n});",
+    "description": "隐藏部门组件右侧图标按钮"
+  }
+] 

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>宜搭代码片段编辑器</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      color: #1e40af;
+      margin-bottom: 30px;
+    }
+    .container {
+      display: flex;
+      gap: 20px;
+    }
+    .editor-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    textarea {
+      min-height: 300px;
+      font-family: monospace;
+    }
+    .output-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .output {
+      min-height: 300px;
+      padding: 10px;
+      background-color: #f5f5f5;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      overflow-y: auto;
+      font-size: 14px;
+    }
+    .buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    button {
+      padding: 8px 16px;
+      background-color: #1e40af;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:hover {
+      background-color: #1c3879;
+    }
+    .instructions {
+      margin-top: 30px;
+      padding: 15px;
+      background-color: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 4px;
+    }
+    .copy-message {
+      color: green;
+      margin-top: 10px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>宜搭代码片段编辑器</h1>
+  
+  <div class="container">
+    <div class="editor-container">
+      <div class="form-group">
+        <label for="title">标题:</label>
+        <input type="text" id="title" placeholder="输入代码片段标题">
+      </div>
+      
+      <div class="form-group">
+        <label for="description">描述:</label>
+        <input type="text" id="description" placeholder="输入一句话描述">
+      </div>
+      
+      <div class="form-group">
+        <label for="code">代码:</label>
+        <textarea id="code" placeholder="输入代码内容"></textarea>
+      </div>
+      
+      <div class="buttons">
+        <button id="convert-btn">转换为JSON</button>
+        <button id="clear-btn">清空内容</button>
+      </div>
+    </div>
+    
+    <div class="output-container">
+      <label for="output">JSON输出:</label>
+      <div class="output" id="output"></div>
+      
+      <div class="buttons">
+        <button id="copy-btn">复制JSON</button>
+        <button id="copy-code-btn">仅复制code字段</button>
+      </div>
+      <div class="copy-message" id="copy-message">复制成功!</div>
+    </div>
+  </div>
+  
+  <div class="instructions">
+    <h3>使用说明</h3>
+    <p>1. 输入代码片段的标题、描述和代码内容</p>
+    <p>2. 点击"转换为JSON"按钮将内容转换为JSON格式</p>
+    <p>3. 点击"复制JSON"按钮复制整个JSON对象，或点击"仅复制code字段"复制code字段内容</p>
+    <p>4. 将复制的内容粘贴到commonCodeData.json文件中</p>
+    <p><strong>注意：</strong> JSON格式要求严格，复制后确保添加正确的逗号和格式</p>
+  </div>
+
+  <script>
+    // 获取DOM元素
+    const titleInput = document.getElementById('title');
+    const descriptionInput = document.getElementById('description');
+    const codeInput = document.getElementById('code');
+    const outputElement = document.getElementById('output');
+    const convertBtn = document.getElementById('convert-btn');
+    const clearBtn = document.getElementById('clear-btn');
+    const copyBtn = document.getElementById('copy-btn');
+    const copyCodeBtn = document.getElementById('copy-code-btn');
+    const copyMessage = document.getElementById('copy-message');
+    
+    // 将普通代码转换为JSON code字段格式
+    function convertToJsonCode(code) {
+      // 替换换行符为\n
+      let result = code.replace(/\n/g, '\\n');
+      // 替换双引号为\"
+      result = result.replace(/"/g, '\\"');
+      // 添加双引号包裹
+      result = '"' + result + '"';
+      
+      return result;
+    }
+    
+    // 创建完整的代码对象
+    function createCodeItem(title, code, description) {
+      const jsonCode = convertToJsonCode(code);
+      
+      try {
+        const item = {
+          title,
+          description,
+          code: JSON.parse(jsonCode)
+        };
+        
+        return {
+          fullJson: JSON.stringify(item, null, 2),
+          codeField: jsonCode
+        };
+      } catch (error) {
+        return {
+          error: "JSON解析错误: " + error.message
+        };
+      }
+    }
+    
+    // 转换按钮点击事件
+    convertBtn.addEventListener('click', () => {
+      const title = titleInput.value.trim();
+      const description = descriptionInput.value.trim();
+      const code = codeInput.value;
+      
+      if (!title || !description || !code) {
+        outputElement.textContent = "错误: 请填写所有字段";
+        return;
+      }
+      
+      const result = createCodeItem(title, code, description);
+      
+      if (result.error) {
+        outputElement.textContent = result.error;
+      } else {
+        outputElement.textContent = result.fullJson;
+      }
+    });
+    
+    // 清空按钮点击事件
+    clearBtn.addEventListener('click', () => {
+      titleInput.value = '';
+      descriptionInput.value = '';
+      codeInput.value = '';
+      outputElement.textContent = '';
+    });
+    
+    // 复制JSON按钮点击事件
+    copyBtn.addEventListener('click', () => {
+      const output = outputElement.textContent;
+      
+      if (!output) {
+        return;
+      }
+      
+      navigator.clipboard.writeText(output)
+        .then(() => showCopyMessage())
+        .catch(err => console.error('复制失败:', err));
+    });
+    
+    // 复制code字段按钮点击事件
+    copyCodeBtn.addEventListener('click', () => {
+      const code = codeInput.value;
+      
+      if (!code) {
+        return;
+      }
+      
+      const jsonCode = convertToJsonCode(code);
+      navigator.clipboard.writeText(jsonCode)
+        .then(() => showCopyMessage())
+        .catch(err => console.error('复制失败:', err));
+    });
+    
+    // 显示复制成功信息
+    function showCopyMessage() {
+      copyMessage.style.display = 'block';
+      setTimeout(() => {
+        copyMessage.style.display = 'none';
+      }, 2000);
+    }
+  </script>
+</body>
+</html> 
