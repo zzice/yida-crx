@@ -189,8 +189,8 @@ async function loadDataFiles() {
  */
 function isDesignerPage() {
   const url = window.location.href;
-  // 匹配 *.aliwork.com/alibaba/web/*/design/pageDesigner 格式的URL
-  const designerPagePattern = /^https?:\/\/[\w.-]+\.aliwork\.com\/alibaba\/web\/[^\/]+\/design\/pageDesigner/;
+  // 匹配 *.aliwork.com/alibaba/web/*/design/pageDesigner 或 *.aliwork.com/dingtalk/web/*/design/pageDesigner 格式的URL
+  const designerPagePattern = /^https?:\/\/[\w.-]+\.aliwork\.com\/(alibaba|dingtalk)\/web\/[^\/]+\/design\/pageDesigner/;
   return designerPagePattern.test(url);
 }
 
