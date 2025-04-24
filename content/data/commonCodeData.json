@@ -33,5 +33,10 @@
     "title": "隐藏部门组件右侧图标按钮",
     "code": "// 通过复合选择器定位元素并隐藏 \ndocument.querySelectorAll(\n  '[id^=\"departmentSelectField_\"] .next-input-inner.next-before'\n).forEach(element => {\n  element.style.display = 'none';\n});",
     "description": "隐藏部门组件右侧图标按钮"
+  },
+  {
+    "title": "获取页面模式",
+    "code": "export function getPageMode() { \n const { flowData = {} } = this.utils.getFormInstanceData();\n const { editMode, viewMode } = flowData;\n if (this.utils.isSubmissionPage()) return '提交页';\n if (viewMode && editMode === false) return '预览页'; \nif (editMode && viewMode === false) return '编辑页';\n    return '流程中';\n}",
+    "description": "获取页面模式"
   }
 ] 
